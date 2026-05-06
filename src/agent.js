@@ -1,40 +1,51 @@
-const Groq = require('groq-sdk');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 require('dotenv').config();
 const systemPrompt = require('./prompts/system');
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ 
+    model: "gemini-2.0-flash",
+    systemInstruction: systemPrompt 
+});
 
-let messageHistory = [
-    { role: 'system', content: systemPrompt }
-];
+let chat = model.startChat({
+    history: [],
+    generationConfig: {
+        temperature: 0.1,
+        topP: 0.95,
+        topK: 40,
+        maxOutputTokens: 8192,
+    },
+});
 
 async function callLLM(userInput) {
     try {
-        messageHistory.push({ role: 'user', content: userInput });
-
-        const chatCompletion = await groq.chat.completions.create({
-            messages: messageHistory,
-            model: 'llama-3.3-70b-versatile',
-            temperature: 0.1,
-        });
-
-        const responseText = chatCompletion.choices[0]?.message?.content || "";
-        console.log("AI Response received:", responseText.substring(0, 100) + "...");
+        console.log("Synthesizing with Gemini...");
+        const result = await chat.sendMessage(userInput);
+        const responseText = result.response.text();
         
-        messageHistory.push({ role: 'assistant', content: responseText });
-
+        console.log("Gemini Response received:", responseText.substring(0, 100) + "...");
         return responseText;
     } catch (error) {
-        console.error("LLM Error:", error.message);
-        return "Sorry, I encountered an error communicating with the AI.";
+        console.error("Gemini API Error:", error.message);
+        // Reset chat if there's a serious error
+        if (error.message.includes("429") || error.message.includes("safety")) {
+            chat = model.startChat({ history: [] });
+        }
+        return JSON.stringify({
+            step: "THINK",
+            content: "I encountered a communication error with the Gemini Uplink. Re-establishing connection..."
+        });
     }
 }
 
 async function provideToolResult(resultMessage) {
-    messageHistory.push({ 
-        role: 'user', 
-        content: `System Tool Execution Result: ${resultMessage}\nDo not execute the tool again immediately unless necessary.` 
-    });
+    try {
+        const input = `System Tool Execution Result: ${resultMessage}\nProceed to the next step based on the strategic plan.`;
+        await chat.sendMessage(input);
+    } catch (error) {
+        console.error("Error providing tool result to Gemini:", error.message);
+    }
 }
 
 module.exports = { callLLM, provideToolResult };
