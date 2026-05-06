@@ -1,15 +1,14 @@
 const chatHistory = document.getElementById('chat-history');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
-const loader = document.getElementById('loader');
 const previewFrame = document.getElementById('preview-frame');
 const codeDisplay = document.getElementById('code-display');
 const tabs = document.querySelectorAll('.tab');
 const tabPanes = document.querySelectorAll('.tab-pane');
 const openBrowserBtn = document.getElementById('open-browser-btn');
+const loader = document.getElementById('loader');
 
 let isProcessing = false;
-let currentProjectFolder = '';
 let currentFilePath = 'index.html';
 
 openBrowserBtn.addEventListener('click', async () => {
@@ -20,41 +19,51 @@ openBrowserBtn.addEventListener('click', async () => {
     });
 });
 
-// Tab Switching Logic
+// Tab Switching
 tabs.forEach(tab => {
     tab.addEventListener('click', () => {
-        const target = tab.getAttribute('data-tab');
         tabs.forEach(t => t.classList.remove('active'));
         tabPanes.forEach(p => p.classList.remove('active'));
         tab.classList.add('active');
-        document.getElementById(`${target}-tab`).classList.add('active');
+        document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
     });
 });
 
-function addMessage(text, role) {
-    const msgDiv = document.createElement('div');
-    msgDiv.className = `message ${role}`;
-    msgDiv.innerHTML = `<div class="message-content">${text}</div>`;
-    chatHistory.appendChild(msgDiv);
+function addMessage(content, role) {
+    const div = document.createElement('div');
+    div.className = `message ${role}`;
+    div.innerHTML = `<div class="message-content">${content}</div>`;
+    chatHistory.appendChild(div);
     chatHistory.scrollTop = chatHistory.scrollHeight;
 }
 
 function updatePipeline(step) {
-    const steps = {
-        'START': 'step-start',
-        'PLAN': 'step-plan',
-        'STRATEGIC PLAN': 'step-plan',
-        'TOOL': 'step-build',
-        'FETCH': 'step-fetch',
-        'DEEP ANALYSIS': 'step-analyze',
-        'OUTPUT': 'step-deploy',
-        'FINAL DELIVERY': 'step-deploy'
-    };
+    const steps = document.querySelectorAll('.pipeline-step');
+    const statusText = document.getElementById('pipeline-status-text');
+    
+    let activeStep = '';
+    if (['START', 'PLAN', 'STRATEGIC PLAN'].includes(step)) activeStep = 'PLAN';
+    else if (step === 'fetchWebsite') activeStep = 'FETCH';
+    else if (['THINK', 'DEEP ANALYSIS'].includes(step)) activeStep = 'ANALYZE';
+    else if (step === 'TOOL') activeStep = 'BUILD';
+    else if (['OUTPUT', 'FINAL DELIVERY'].includes(step)) activeStep = 'DEPLOY';
 
-    const targetId = steps[step];
-    if (targetId) {
-        document.querySelectorAll('.pipeline-step').forEach(s => s.classList.remove('active'));
-        document.getElementById(targetId).classList.add('active');
+    if (activeStep) {
+        statusText.textContent = `Current Phase: ${activeStep}`;
+        let foundActive = false;
+        steps.forEach(s => {
+            const sStep = s.dataset.step;
+            if (sStep === activeStep) {
+                s.classList.add('active');
+                s.classList.remove('completed');
+                foundActive = true;
+            } else if (!foundActive) {
+                s.classList.add('completed');
+                s.classList.remove('active');
+            } else {
+                s.classList.remove('active', 'completed');
+            }
+        });
     }
 }
 
@@ -66,6 +75,7 @@ async function handleSynthesis() {
     userInput.value = '';
     addMessage(message, 'user');
     loader.classList.remove('hidden');
+    updatePipeline('PLAN');
 
     try {
         let currentResponse = await fetch('/api/chat', {
@@ -75,8 +85,10 @@ async function handleSynthesis() {
         }).then(res => res.json());
 
         while (currentResponse && currentResponse.step !== 'OUTPUT' && currentResponse.step !== 'FINAL DELIVERY') {
-            updatePipeline(currentResponse.step);
-            addMessage(currentResponse.content, 'ai');
+            updatePipeline(currentResponse.step || (currentResponse.tool_name ? 'TOOL' : 'THINK'));
+            if (currentResponse.content) {
+                addMessage(currentResponse.content, 'ai');
+            }
 
             if (currentResponse.step === 'TOOL') {
                 const { tool_name, tool_args } = currentResponse;
@@ -87,14 +99,14 @@ async function handleSynthesis() {
                     body: JSON.stringify({ tool_name, tool_args })
                 }).then(res => res.json());
 
-                // If a file was written, update the preview
+                // Real-time Preview Update
                 if (tool_name === 'writeFile' || tool_name === 'appendFile') {
                     const filePath = tool_args.filePath || tool_args.filename;
-                    currentFilePath = filePath; 
+                    currentFilePath = filePath;
                     if (filePath.endsWith('index.html')) {
                         previewFrame.src = `/output/${filePath}?t=${Date.now()}`;
                     }
-                    codeDisplay.textContent += `\n/* File: ${filePath} */\n${tool_args.content || ''}\n`;
+                    codeDisplay.textContent += `\n/* SYNTHESIZED: ${filePath} */\n${tool_args.content || ''}\n`;
                 }
 
                 currentResponse = await fetch('/api/chat', {
@@ -103,7 +115,7 @@ async function handleSynthesis() {
                     body: JSON.stringify({
                         message: {
                             step: "OBSERVE",
-                            tool_name: currentResponse.tool_name,
+                            tool_name: tool_name,
                             result: toolResult.result
                         },
                         isObserve: true
@@ -122,7 +134,7 @@ async function handleSynthesis() {
         }
 
         if (currentResponse) {
-            updatePipeline(currentResponse.step);
+            updatePipeline('FINAL DELIVERY');
             addMessage(currentResponse.content, 'ai');
         }
     } catch (error) {

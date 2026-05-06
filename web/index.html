@@ -17,18 +17,26 @@
                 <span class="brand">VANTAGE AI</span>
             </div>
             <nav>
-                <div class="nav-item active">
-                    <span class="icon">⟡</span> Synthesis Engine
+                <div class="nav-section">
+                    <span class="nav-label">ARCHITECT</span>
+                    <div class="nav-item active">
+                        <span class="icon">⟡</span> Synthesis Engine
+                    </div>
                 </div>
-                <div class="nav-item">
-                    <span class="icon">📜</span> History
+                <div class="nav-section">
+                    <span class="nav-label">PROJECT FILES</span>
+                    <div id="file-list" class="file-list">
+                        <div class="file-item active">index.html</div>
+                        <div class="file-item">styles.css</div>
+                        <div class="file-item">script.js</div>
+                    </div>
                 </div>
             </nav>
             <div class="status-card">
                 <div class="status-dot"></div>
                 <div class="status-info">
-                    <span class="label">Engine Status</span>
-                    <span class="value">Ready for Synthesis</span>
+                    <span class="label">Engine</span>
+                    <span class="value success">Online</span>
                 </div>
             </div>
         </aside>
@@ -75,19 +83,22 @@
             </div>
 
             <section class="activity-section">
-                <h2>Active Synthesis Pipeline</h2>
+                <div class="section-header">
+                    <h2>SYNTHESIS PIPELINE</h2>
+                    <div id="pipeline-status-text" class="status-text">Engine Ready</div>
+                </div>
                 <div class="pipeline" id="pipeline">
-                    <div class="pipeline-step" id="step-start">START</div>
+                    <div class="pipeline-step" data-step="START">START</div>
                     <div class="pipeline-arrow">→</div>
-                    <div class="pipeline-step" id="step-plan">PLAN</div>
+                    <div class="pipeline-step" data-step="PLAN">PLAN</div>
                     <div class="pipeline-arrow">→</div>
-                    <div class="pipeline-step" id="step-fetch">FETCH</div>
+                    <div class="pipeline-step" data-step="FETCH">FETCH</div>
                     <div class="pipeline-arrow">→</div>
-                    <div class="pipeline-step" id="step-analyze">ANALYZE</div>
+                    <div class="pipeline-step" data-step="ANALYZE">ANALYZE</div>
                     <div class="pipeline-arrow">→</div>
-                    <div class="pipeline-step" id="step-build">BUILD</div>
+                    <div class="pipeline-step" data-step="BUILD">BUILD</div>
                     <div class="pipeline-arrow">→</div>
-                    <div class="pipeline-step" id="step-deploy">DEPLOY</div>
+                    <div class="pipeline-step" data-step="DEPLOY">DEPLOY</div>
                 </div>
             </section>
         </main>
