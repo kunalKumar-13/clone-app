@@ -6,9 +6,19 @@ const previewFrame = document.getElementById('preview-frame');
 const codeDisplay = document.getElementById('code-display');
 const tabs = document.querySelectorAll('.tab');
 const tabPanes = document.querySelectorAll('.tab-pane');
+const openBrowserBtn = document.getElementById('open-browser-btn');
 
 let isProcessing = false;
 let currentProjectFolder = '';
+let currentFilePath = 'index.html';
+
+openBrowserBtn.addEventListener('click', async () => {
+    await fetch('/api/tool', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tool_name: 'openBrowser', tool_args: { filePath: currentFilePath } })
+    });
+});
 
 // Tab Switching Logic
 tabs.forEach(tab => {
@@ -79,11 +89,12 @@ async function handleSynthesis() {
 
                 // If a file was written, update the preview
                 if (tool_name === 'writeFile' || tool_name === 'appendFile') {
-                    const filename = tool_args.filePath || tool_args.filename;
-                    if (filename.endsWith('index.html')) {
-                        previewFrame.src = `/output/${filename}?t=${Date.now()}`;
+                    const filePath = tool_args.filePath || tool_args.filename;
+                    currentFilePath = filePath; 
+                    if (filePath.endsWith('index.html')) {
+                        previewFrame.src = `/output/${filePath}?t=${Date.now()}`;
                     }
-                    codeDisplay.textContent += `\n/* File: ${filename} */\n${tool_args.content}\n`;
+                    codeDisplay.textContent += `\n/* File: ${filePath} */\n${tool_args.content || ''}\n`;
                 }
 
                 currentResponse = await fetch('/api/chat', {

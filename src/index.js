@@ -108,35 +108,30 @@ async function startCLI() {
 
         const { step, content, tool_name, tool_args } = response;
 
-        const validSteps = ["START", "THINK", "TOOL", "OUTPUT", "PLAN", "STRATEGIC PLAN", "DEEP ANALYSIS", "FINAL DELIVERY"];
-
-        if (!validSteps.includes(step)) {
-            console.log(chalk.red(`\n❌ Error: Invalid architectural phase [${step}]`));
-            break;
-        }
-
-        console.log(chalk.magenta(`\n\n[PHASE: ${step}]`));
-        if (content) console.log(chalk.white(`➤ ${content}`));
-
-        if (step === "OUTPUT" || step === "FINAL DELIVERY") {
-            console.log(chalk.green.bold("\n✅ Synthesis complete. Project deployed successfully.\n"));
-            break;
-        }
-
-        if (step === "TOOL") {
-            console.log(chalk.yellow(`\n⚙️  Executing Module: ${tool_name}`));
-
+        if (step === "START") {
+            console.log(chalk.cyan(`\n🚀 INITIALIZING: ${content}`));
+        } else if (step === "PLAN" || step === "STRATEGIC PLAN") {
+            console.log(chalk.magenta(`\n📝 STRATEGIC PLAN:`));
+            console.log(chalk.white(content));
+        } else if (step === "THINK" || step === "DEEP ANALYSIS") {
+            console.log(chalk.yellow(`\n🧠 ARCHITECTURAL REASONING:`));
+            console.log(chalk.italic.gray(content));
+        } else if (step === "TOOL") {
+            console.log(chalk.green(`\n🛠️  EXECUTING MODULE: ${tool_name}`));
+            
             const result = await runTool({ tool_name, tool_args });
-
-            console.log(chalk.cyan(`⟳ Execution Result: ${result}`));
+            console.log(chalk.cyan(`📡 OBSERVATION: ${result}`));
 
             currentInput = JSON.stringify({
                 step: "OBSERVE",
                 tool_name,
                 result
             });
-
-            continue;
+            continue; 
+        } else if (step === "OUTPUT" || step === "FINAL DELIVERY") {
+            console.log(chalk.bold.green(`\n✅ ARCHITECTURAL SYNTHESIS COMPLETE`));
+            console.log(chalk.white(content));
+            break;
         }
 
         currentInput = JSON.stringify({

@@ -18,13 +18,10 @@
             </div>
             <nav>
                 <div class="nav-item active">
-                    <span class="icon">⟡</span> Synthesis
+                    <span class="icon">⟡</span> Synthesis Engine
                 </div>
                 <div class="nav-item">
-                    <span class="icon">📁</span> Projects
-                </div>
-                <div class="nav-item">
-                    <span class="icon">⚙️</span> Settings
+                    <span class="icon">📜</span> History
                 </div>
             </nav>
             <div class="status-card">
@@ -59,9 +56,12 @@
                 </section>
 
                 <section class="preview-section">
-                    <div class="preview-tabs">
-                        <button class="tab active" data-tab="preview">LIVE PREVIEW</button>
-                        <button class="tab" data-tab="code">SOURCE CODE</button>
+                    <div class="preview-header">
+                        <div class="preview-tabs">
+                            <button class="tab active" data-tab="preview">LIVE PREVIEW</button>
+                            <button class="tab" data-tab="code">SOURCE CODE</button>
+                        </div>
+                        <button id="open-browser-btn" class="action-btn">OPEN IN BROWSER</button>
                     </div>
                     <div class="preview-content">
                         <div id="preview-tab" class="tab-pane active">
