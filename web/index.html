@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vantage AI | Architectural Design Engine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="vantage-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="v">V</span>
+                <span class="brand">VANTAGE AI</span>
+            </div>
+            <nav>
+                <div class="nav-item active">
+                    <span class="icon">⟡</span> Synthesis
+                </div>
+                <div class="nav-item">
+                    <span class="icon">📁</span> Projects
+                </div>
+                <div class="nav-item">
+                    <span class="icon">⚙️</span> Settings
+                </div>
+            </nav>
+            <div class="status-card">
+                <div class="status-dot"></div>
+                <div class="status-info">
+                    <span class="label">Engine Status</span>
+                    <span class="value">Ready for Synthesis</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="content">
+            <header class="main-header">
+                <h1>High-End Design Engine</h1>
+                <p>Architecturally re-engineering the web with autonomous precision.</p>
+            </header>
+
+            <div class="workspace">
+                <section class="chat-section" id="chat-container">
+                    <div class="chat-history" id="chat-history">
+                        <div class="message system">
+                            <div class="message-content">
+                                Welcome to Vantage AI. Enter a URL or a design request to begin the architectural synthesis.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-area">
+                        <input type="text" id="user-input" placeholder="Enter your architectural request (e.g., Synthesize example.com)..." autocomplete="off">
+                        <button id="send-btn">SYNTHESIZE</button>
+                    </div>
+                </section>
+
+                <section class="preview-section">
+                    <div class="preview-tabs">
+                        <button class="tab active" data-tab="preview">LIVE PREVIEW</button>
+                        <button class="tab" data-tab="code">SOURCE CODE</button>
+                    </div>
+                    <div class="preview-content">
+                        <div id="preview-tab" class="tab-pane active">
+                            <iframe id="preview-frame" title="Live Preview"></iframe>
+                        </div>
+                        <div id="code-tab" class="tab-pane">
+                            <pre><code id="code-display">// Source code will appear here...</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <section class="activity-section">
+                <h2>Active Synthesis Pipeline</h2>
+                <div class="pipeline" id="pipeline">
+                    <div class="pipeline-step" id="step-start">START</div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-step" id="step-plan">PLAN</div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-step" id="step-fetch">FETCH</div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-step" id="step-analyze">ANALYZE</div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-step" id="step-build">BUILD</div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-step" id="step-deploy">DEPLOY</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="loader" class="loader-overlay hidden">
+        <div class="v-loader">V</div>
+        <p>Analyzing Digital Architecture...</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

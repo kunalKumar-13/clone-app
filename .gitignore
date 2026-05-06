@@ -1,0 +1,12 @@
+node_modules/
+.env
+output/
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.idea/
+.vscode/
+vantage-ai/
+MineshShaw-cursor_clone_cli-143a1f4/
