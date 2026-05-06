@@ -6,16 +6,17 @@
     <title>Vantage AI | Architectural Design Engine</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@700;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="vantage-container">
+    <div class="vantage-app">
         <aside class="sidebar">
-            <div class="logo">
-                <span class="v">V</span>
-                <span class="brand">VANTAGE AI</span>
+            <div class="brand">
+                <div class="logo-v">V</div>
+                <span class="brand-name">VANTAGE AI</span>
             </div>
+
             <nav>
                 <div class="nav-section">
                     <span class="nav-label">ARCHITECT</span>
@@ -23,89 +24,100 @@
                         <span class="icon">⟡</span> Synthesis Engine
                     </div>
                 </div>
+
                 <div class="nav-section">
                     <span class="nav-label">PROJECT FILES</span>
                     <div id="file-list" class="file-list">
-                        <div class="file-item active">index.html</div>
-                        <div class="file-item">styles.css</div>
-                        <div class="file-item">script.js</div>
+                        <div class="file-item" data-file="index.html">index.html</div>
+                        <div class="file-item" data-file="styles.css">styles.css</div>
+                        <div class="file-item" data-file="script.js">script.js</div>
                     </div>
                 </div>
             </nav>
-            <div class="status-card">
+
+            <div class="status-box">
                 <div class="status-dot"></div>
                 <div class="status-info">
-                    <span class="label">Engine</span>
-                    <span class="value success">Online</span>
+                    <span class="label">Engine Status</span>
+                    <span class="value">Online</span>
                 </div>
             </div>
         </aside>
 
-        <main class="content">
-            <header class="main-header">
+        <main class="main">
+            <header class="top-bar">
                 <h1>High-End Design Engine</h1>
                 <p>Architecturally re-engineering the web with autonomous precision.</p>
             </header>
 
-            <div class="workspace">
-                <section class="chat-section" id="chat-container">
-                    <div class="chat-history" id="chat-history">
-                        <div class="message system">
-                            <div class="message-content">
+            <div class="workspace-grid">
+                <section class="panel">
+                    <div class="chat-container">
+                        <div id="chat-history" class="chat-history">
+                            <div class="msg ai">
                                 Welcome to Vantage AI. Enter a URL or a design request to begin the architectural synthesis.
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="input-area">
-                        <input type="text" id="user-input" placeholder="Enter your architectural request (e.g., Synthesize example.com)..." autocomplete="off">
-                        <button id="send-btn">SYNTHESIZE</button>
+                        <div class="input-container">
+                            <input type="text" id="user-input" placeholder="E.g., Clone scaler.com landing page..." autocomplete="off">
+                            <button id="send-btn" class="btn-primary">SYNTHESIZE</button>
+                        </div>
                     </div>
                 </section>
 
-                <section class="preview-section">
-                    <div class="preview-header">
-                        <div class="preview-tabs">
-                            <button class="tab active" data-tab="preview">LIVE PREVIEW</button>
-                            <button class="tab" data-tab="code">SOURCE CODE</button>
+                <section class="panel">
+                    <div class="preview-tabs">
+                        <button class="preview-tab-btn active" data-view="preview">LIVE PREVIEW</button>
+                        <button class="preview-tab-btn" data-view="code">SOURCE CODE</button>
+                        <div class="preview-actions">
+                            <button id="open-browser-btn" class="preview-tab-btn">OPEN IN BROWSER</button>
                         </div>
-                        <button id="open-browser-btn" class="action-btn">OPEN IN BROWSER</button>
                     </div>
                     <div class="preview-content">
-                        <div id="preview-tab" class="tab-pane active">
-                            <iframe id="preview-frame" title="Live Preview"></iframe>
-                        </div>
-                        <div id="code-tab" class="tab-pane">
-                            <pre><code id="code-display">// Source code will appear here...</code></pre>
-                        </div>
+                        <iframe id="preview-frame" src="about:blank"></iframe>
+                        <div id="code-view">/* Source code will appear here... */</div>
                     </div>
                 </section>
             </div>
 
-            <section class="activity-section">
-                <div class="section-header">
+            <section class="pipeline-panel">
+                <div class="pipeline-header">
                     <h2>SYNTHESIS PIPELINE</h2>
-                    <div id="pipeline-status-text" class="status-text">Engine Ready</div>
+                    <span id="pipeline-status-text" class="status-text">Engine Ready</span>
                 </div>
-                <div class="pipeline" id="pipeline">
-                    <div class="pipeline-step" data-step="START">START</div>
-                    <div class="pipeline-arrow">→</div>
-                    <div class="pipeline-step" data-step="PLAN">PLAN</div>
-                    <div class="pipeline-arrow">→</div>
-                    <div class="pipeline-step" data-step="FETCH">FETCH</div>
-                    <div class="pipeline-arrow">→</div>
-                    <div class="pipeline-step" data-step="ANALYZE">ANALYZE</div>
-                    <div class="pipeline-arrow">→</div>
-                    <div class="pipeline-step" data-step="BUILD">BUILD</div>
-                    <div class="pipeline-arrow">→</div>
-                    <div class="pipeline-step" data-step="DEPLOY">DEPLOY</div>
+                <div class="pipeline-track">
+                    <div class="step-node" data-step="PLAN">
+                        <div class="step-circle">01</div>
+                        <span class="step-label">PLAN</span>
+                        <div class="track-line"></div>
+                    </div>
+                    <div class="step-node" data-step="FETCH">
+                        <div class="step-circle">02</div>
+                        <span class="step-label">FETCH</span>
+                        <div class="track-line"></div>
+                    </div>
+                    <div class="step-node" data-step="ANALYZE">
+                        <div class="step-circle">03</div>
+                        <span class="step-label">ANALYZE</span>
+                        <div class="track-line"></div>
+                    </div>
+                    <div class="step-node" data-step="BUILD">
+                        <div class="step-circle">04</div>
+                        <span class="step-label">BUILD</span>
+                        <div class="track-line"></div>
+                    </div>
+                    <div class="step-node" data-step="DEPLOY">
+                        <div class="step-circle">05</div>
+                        <span class="step-label">DEPLOY</span>
+                        <div class="track-line"></div>
+                    </div>
                 </div>
             </section>
         </main>
     </div>
 
-    <div id="loader" class="loader-overlay hidden">
-        <div class="v-loader">V</div>
+    <div id="loader" class="loader-overlay">
+        <div class="v-pulse">V</div>
         <p>Analyzing Digital Architecture...</p>
     </div>
 
