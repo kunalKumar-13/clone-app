@@ -2,7 +2,6 @@
 
 Vantage AI is a sophisticated design synthesis engine that architecturally re-engineers digital experiences. It analyzes target websites and reconstructs them into high-performance, premium digital products using autonomous precision.
 
-![Vantage AI Dashboard](web/index.html) <!-- Note: This is a placeholder for the dashboard UI -->
 
 ## 🚀 Core Features
 
